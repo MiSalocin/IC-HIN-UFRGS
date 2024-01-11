@@ -39,11 +39,7 @@ the following variables:
 * __Collisions (NColl/I):__ The amount collisions between two nucleons;
 * __Participants (NPart/I):__ The amount single nucleons that participated in at least
   one collision;
-<<<<<<< HEAD
-* __Distance (d/D):__ The distance in fm between the two nuclei.
-=======
 * __Distance (Dist/D):__ The distance in fm between the two nuclei.
->>>>>>> 4cc359b79ae45c9b4e84ca2d6ebed3f5b4a44693
 
 ***
 # CollisionsDraw
@@ -82,7 +78,7 @@ Generate graphs to visualize the generated data by
 
 We consider that particle production in nucleon-nucleon collisions (proton-proton, proton-neutron, neutron-neutron) follow a Negative Binomial Distribution (NBD), this code tries to fit the generated data with experimental data from colliders (for example, we use CMS public data, CMS Open Data of PbPb collisions at the LHC with nucleon-nucleon center-of-mass energy of 2.76 TeV):
 
-    root -l 'nbd(int nruns, char* dataFile, char* compareFile, char* location)'
+    root -l 'nbd(int nruns, char* dataFile, char* compareFile)'
 
 the used NBD formula is:
 
@@ -94,18 +90,11 @@ $$ f(n) = \dfrac{\Gamma (k+n)}{k! \cdot \Gamma(n)} \cdot \dfrac{(\mu/k)^n}{(1 + 
 
 * __CompareFile:__ Specify the place of the experimental data;
 
-* __Location:__ Define the place where to save the results, histograms and graphs.
-
 ## Generated data
 
-* __log.txt:__ Saves all the output of the program, useful for error solving later;
+* __results.png:__ An 2D hist showing the chi² error for all mu and k values;
 
-* __results.txt:__ Save the best Chi² value and the respective mu and k for each run;  
-
-* __fit.root:__ The final histogram with the calculated mu and k (only for 0.5 to 5 TeV);
-
-* __gen_x.y.z.root:__ Saves the histogram from each run, the X represents the generation, y the 
-
+* __hist.png:__ A histogram showing the experimental energy data and the simulated one;  
 ***
 
 # Notes
