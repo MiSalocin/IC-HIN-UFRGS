@@ -73,18 +73,20 @@ input_tree->SetBranchStatus("*", false);
 
 // ...but the branch we need
 input_tree->SetBranchStatus("Ntrk", true);
+input_tree->SetBranchStatus("HFsumET", true);
 input_tree->SetBranchStatus("trkPt", true);
 input_tree->SetBranchStatus("trkEta", true);
 input_tree->SetBranchStatus("trkPhi", true);
 
 int Ntrk;
-int HFsumET;
+float HFsumET;
 
 float trkPt[2000];
 float trkPhi[2000];
 float trkEta[2000];
 
 input_tree->SetBranchAddress("Ntrk",&Ntrk);
+input_tree->SetBranchAddress("HFsumET",&HFsumET);
 input_tree->SetBranchAddress("trkPt",&trkPt);
 input_tree->SetBranchAddress("trkEta",&trkEta);
 input_tree->SetBranchAddress("trkPhi",&trkPhi);
@@ -115,13 +117,18 @@ for (int j = 0; j < ptTbins_; j++) {
    }
 }
 
+//std::cout << "HFsumET: " << HFsumET << std::endl;
 
 for (int i = 0; input_tree->LoadTree(i) >= 0; ++i) {
 
    // Load the data for the given tree entry (i.e. a collision event)
    input_tree->GetEntry(i);
 
-   if (900 < HFsumET && HFsumET < 1210) continue;
+   //if (300 < HFsumET && HFsumET < 1210) continue; //30 - 60%
+
+   //if (1210 < HFsumET && HFsumET < 2775) continue; // 10 - 30%
+						   
+   if (3390 < HFsumET && HFsumET < 4500) continue; // 0 - 5%
 
    // Loop over all particles in the event
    for (int j = 0; j < Ntrk; j++) {

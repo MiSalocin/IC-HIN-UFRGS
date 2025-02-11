@@ -78,7 +78,11 @@ Generate graphs to visualize the generated data by
 
 We consider that particle production in nucleon-nucleon collisions (proton-proton, proton-neutron, neutron-neutron) follow a Negative Binomial Distribution (NBD), this code tries to fit the generated data with experimental data from colliders (for example, we use CMS public data, CMS Open Data of PbPb collisions at the LHC with nucleon-nucleon center-of-mass energy of 2.76 TeV):
 
+<<<<<<< HEAD
     root -l 'nbd(char* dataFile, char* compareFile)'
+=======
+    root -l 'nbd(int nruns, char* dataFile, char* compareFile)'
+>>>>>>> 82e75058e8ca3415798da5809217a35bdbe01437
 
 the used NBD formula is:
 
@@ -92,14 +96,9 @@ $$ f(n) = \dfrac{\Gamma (k+n)}{k! \cdot \Gamma(n)} \cdot \dfrac{(\mu/k)^n}{(1 + 
 
 ## Generated data
 
-* __log.txt:__ Saves all the output of the program, useful for error solving later;
+* __results.png:__ An 2D hist showing the chi² error for all mu and k values;
 
-* __results.txt:__ Save the best Chi² value and the respective mu and k for each run;  
-
-* __fit.root:__ The final histogram with the calculated mu and k (only for 0.5 to 5 TeV);
-
-* __gen_x.y.z.root:__ Saves the histogram from each run, the X represents the generation, y the 
-
+* __hist.png:__ A histogram showing the experimental energy data and the simulated one;  
 ***
 
 # Notes

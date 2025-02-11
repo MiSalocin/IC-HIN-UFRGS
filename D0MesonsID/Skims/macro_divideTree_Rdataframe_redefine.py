@@ -1,4 +1,4 @@
-###To run it do: << pyroot macro_divideTree_Rdataframe.py >> 
+###To run it do: << pyroot macro_divideTree_Rdataframe_redefine.py >> 
 
 import ROOT
 

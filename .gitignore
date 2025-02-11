@@ -37,3 +37,6 @@ D0MesonsID/MLStudies/TMVApp.root
 D0MesonsID/MLStudies/TMVAClassification_BDT.weights.xml
 D0MesonsID/MLStudies/TMVA_01.root
 
+D0MesonsID/MLStudies/output.txt
+.gitignore
+D0MesonsID/ControlPlots/.vscode/settings.json

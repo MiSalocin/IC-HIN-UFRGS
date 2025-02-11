@@ -172,7 +172,7 @@ int TMVAClassification_01( TString myMethodList = "" )
    TFile* outputFile = TFile::Open( outfileName, "RECREATE" );
 
    // Set the variables plots binning to 300
-   (TMVA::gConfig().GetVariablePlotting()).fNbinsMVAoutput = 10;
+   (TMVA::gConfig().GetVariablePlotting()).fNbinsMVAoutput = 40;
  
    // Create the factory object. Later you can choose the methods
    // whose performance you'd like to investigate. The factory is
@@ -223,6 +223,7 @@ int TMVAClassification_01( TString myMethodList = "" )
    dataloader->AddVariable( "DPhi", 'F' );
    dataloader->AddVariable( "DPt", 'F' );
    dataloader->AddVariable( "DRapidity", 'F' );
+   dataloader->AddVariable( "DGen", 'F' );
 
    // You can add so-called "Spectator variables", which are not used in the MVA training,
    // but will appear in the final "TestTree" produced by TMVA. This TestTree will contain the
@@ -311,7 +312,9 @@ int TMVAClassification_01( TString myMethodList = "" )
 ////   dataloader->PrepareTrainingAndTestTree( mycuts, mycutb,
 ////                                        "nTrain_Signal=1000:nTrain_Background=1000:SplitMode=Random:NormMode=NumEvents:!V" );
  
-   dataloader->PrepareTrainingAndTestTree( mycuts, mycutb, "SplitMode=random:!V" );
+   //dataloader->PrepareTrainingAndTestTree( mycuts, mycutb, "SplitMode=random:!V" );
+
+   dataloader->PrepareTrainingAndTestTree( mycuts, mycutb, "nTrain_Signal=1898:nTrain_Background=:nTest_Signal=1602409:SplitMode=Random:NormMode=NumEvents:!V" );
 
    // ### Book MVA methods
    //

@@ -1,6 +1,6 @@
 void vn_extractor(){
 
-  TFile * f = TFile::Open("/home/pedrolunardi/IC/collaboration/HydjetPlusPlus/AzimuthalCorrelation/root_files/corrfunc1D_cent_10_30.root");
+  TFile * f = TFile::Open("/home/pedrolunardi/IC/collaboration/HydjetPlusPlus/AzimuthalCorrelation/corrfunc1D_cent_0_5.root");
 
   TH1D* h = (TH1D*) f->Get("signal_dphi_projection_0");
 
@@ -43,7 +43,9 @@ void vn_extractor(){
   // Salva o canvas como um pdf
 
   c->Draw("SURF1");
-  c->SetTitle("10 - 30 %");
-  c->SaveAs("FourierFit_10_30.pdf");
+  //c->SetTitle("30 - 60 %");
+  //c->SetTitle("10 - 30 %");
+  c->SetTitle("0 - 5 %");
+  c->SaveAs("FourierFit_0_5_opendata.pdf");
 
 }
