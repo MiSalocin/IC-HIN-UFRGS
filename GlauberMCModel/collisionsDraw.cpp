@@ -37,7 +37,9 @@ const Double_t
     radiusSq   = (sigma) / pi; //fm
 
 // Main code
-void collisionsDraw (int nucleons = 208, int sim = 20, const string& location = "./sim"){
+void collisionsDraw (int nucleons = 208,
+                     int sim = 20,
+                     const string& location = "./sim"){
     gSystem->mkdir(location.c_str());
 
     // Config RNG

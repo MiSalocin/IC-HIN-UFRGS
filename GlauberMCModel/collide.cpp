@@ -1,6 +1,5 @@
 #include "TF1.h"
 #include "TRandom.h"
-#include <random>
 #include <TROOT.h>
 #include <TTree.h>
 #include <TFile.h>
@@ -20,17 +19,19 @@ struct Data {
 };
 
 // Const values used in the simulations
-const Double_t pi       = TMath::Pi();
-const Double_t r0       = 6.62;       // fm
-const Double_t a        = 0.542;      // fm
-const Double_t sigma    = 6.5;        // fm^2
-const Double_t radiusSq = sigma / pi; // fm^2
-const Double_t minDisSq = 0;          // fm^2
-const int nucleons      = 208;
-const int simulations   = 1e6;
+const Double_t
+       pi       = TMath::Pi(),
+       r0       = 6.62,       // fm
+       a        = 0.542,      // fm
+       sigma    = 6.5,        // fm^2
+       radiusSq = sigma / (10 * pi), // fm^2
+       minDisSq = 0;          // fm^2
 
 // Main code
-void collide (const string& filename = "./data.root", const ::int64_t nThreads =std::thread::hardware_concurrency()){
+void collide (const string& filename = "./data.root",
+              const int nucleons      = 208,
+              const int simulations   = 1e6,
+              const ::int64_t nThreads =std::thread::hardware_concurrency()){
 
     // Configure the program to export in a Root file
     Data data{};
@@ -38,7 +39,7 @@ void collide (const string& filename = "./data.root", const ::int64_t nThreads =
     auto *save = new TTree("Data", "Simulation");
     save->Branch("Collisions", &data, "NColl/I:NPart/I:Dist/D");
 
-    auto *distF = new TF1("distF", "x*2*pi", 0, 3*r0);
+    auto *distF = new TF1("distF", "x*2*pi", 0, 2.8*r0);
     auto *posF = new TF1("posF",  "(x*x)/(1+exp((x-[0])/[1]))", 0, 2*r0);
     posF->SetParameters(r0, a);
 
@@ -46,6 +47,7 @@ void collide (const string& filename = "./data.root", const ::int64_t nThreads =
     ROOT::EnableImplicitMT();
     ROOT::EnableThreadSafety();
     vector<thread> threads;
+    threads.reserve(nThreads);
     for (int k = 0; k < nThreads; k++) {
         threads.emplace_back([&, k] {
 
@@ -57,7 +59,8 @@ void collide (const string& filename = "./data.root", const ::int64_t nThreads =
                 Nucleon n1[nucleons];
                 Nucleon n2[nucleons];
 
-                Double_t cosTheta, sinTheta, phi,  pos;
+                Double_t cosTheta, sinTheta,
+                         phi,  pos;
 
                 int nCol = 0;
                 int nPart = 0;
@@ -76,6 +79,7 @@ void collide (const string& filename = "./data.root", const ::int64_t nThreads =
                     n1[i].y = pos * sinTheta * sin(phi);
                     n1[i].z = pos * cosTheta;
 
+                    // Do the same for the n2 nucleus
                     cosTheta = 2 * gRandom->Rndm() - 1;
                     sinTheta = sqrt(1 - cosTheta * cosTheta);
                     phi = 2 * pi * gRandom->Rndm();
@@ -117,8 +121,9 @@ void collide (const string& filename = "./data.root", const ::int64_t nThreads =
 
                 // Verify collision partTemp and number
                 Double_t dx, dy;
-                bool part1[nucleons] = {false};
-                bool part2[nucleons] = {false};
+                bool part1[nucleons];
+                bool part2[nucleons];
+                for (int i = 0; i < nucleons; i++) {part1[i] = false; part2[i] = false;}
                 for (int i = 0; i < nucleons; i++) {
                     for (int j = 0; j < nucleons; j++) {
 
@@ -137,12 +142,14 @@ void collide (const string& filename = "./data.root", const ::int64_t nThreads =
                 }
 
                 // Write the data to the root file
+                p+= (int) nThreads;
                 if (nPart > 0) {
                     mtx.lock();
-                    data.nCol = nCol; data.nPart = nPart;data.d = d;
+                    data.nCol = nCol;
+                    data.nPart = nPart;
+                    data.d = d;
                     save->Fill();
                     mtx.unlock();
-                    p+= (int) nThreads;
                 }
             }
         });
