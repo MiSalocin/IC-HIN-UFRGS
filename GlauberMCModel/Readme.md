@@ -78,12 +78,6 @@ Generate graphs to visualize the generated data by
 
 We consider that particle production in nucleon-nucleon collisions (proton-proton, proton-neutron, neutron-neutron) follow a Negative Binomial Distribution (NBD), this code tries to fit the generated data with experimental data from colliders (for example, we use CMS public data, CMS Open Data of PbPb collisions at the LHC with nucleon-nucleon center-of-mass energy of 2.76 TeV):
 
-<<<<<<< HEAD
-    root -l 'nbd(char* dataFile, char* compareFile)'
-=======
-    root -l 'nbd(int nruns, char* dataFile, char* compareFile)'
->>>>>>> 82e75058e8ca3415798da5809217a35bdbe01437
-
 the used NBD formula is:
 
 $$ f(n) = \dfrac{\Gamma (k+n)}{k! \cdot \Gamma(n)} \cdot \dfrac{(\mu/k)^n}{(1 + \mu/k)^{n + k}} $$

@@ -18,22 +18,12 @@ using namespace std;
 // Structures used to generate and save data.
 struct Data {int nCol, nPart; double d;};
 
-<<<<<<< HEAD
-// Number of normalization values to test
-constexpr int nDim = 30;
-
-// Normalization range to test
-constexpr double nMax = 1e-1;
-constexpr double nMin = 5e-3;
-constexpr double nDelta = (nMax - nMin) / (nDim - 1);
-=======
 void nbd(const char* dataFile = "./data.root",
          const char* compareFile = "./HFSumEt.root"){
 
     double hScale = 1./1000.;
     const int scanSize = 5;
     const int nDim = 10;
->>>>>>> 82e75058e8ca3415798da5809217a35bdbe01437
 
 // Number of each parameter value to test
 int scanSize = 8;
@@ -102,17 +92,6 @@ void nbd(const char* dataFile = "./data.root",
     }
     cout << "Done!\n";
 
-<<<<<<< HEAD
-
-    // Create variables to store the best values
-    double bestK = 0, bestMu = 0, bestN = 0;
-    double chi2best = INFINITY;
-
-    // Run through the Mu values
-    cout << "Iterating through values:\n";
-    for (int iMu = 0; iMu < scanSize; iMu++) {
-        const double mu = muMin + muDelta * iMu;
-=======
     // Create graphing variables
     double bestK, bestMu;
     double chi2best = INFINITY;
@@ -120,26 +99,17 @@ void nbd(const char* dataFile = "./data.root",
     // Run through the Mu values
     for (int iMu = 0; iMu < scanSize; iMu++) {
         double mu = muMin + muDelta * iMu;
->>>>>>> 82e75058e8ca3415798da5809217a35bdbe01437
 
         // Run through the K values
         for (int ik = 0; ik < scanSize; ik++) {
             double localChi2best = INFINITY;
-<<<<<<< HEAD
             const double k = kMin + kDelta * ik;
             cout << "Mu value: " << mu << "   ";
             cout << "K value: " << k << "   ";
-=======
-            double k = kMin + kDelta * ik;
->>>>>>> 82e75058e8ca3415798da5809217a35bdbe01437
 
             // Set the NBD parameters
             NBD->SetParameters(mu, k);
-<<<<<<< HEAD
-            const auto generated = new TH1F("Generated", "sumETf vs events", 100, 0, 5);
-=======
             TH1F *generated = new TH1F("Generated", "sumETf vs events", 100, 0, 5);
->>>>>>> 82e75058e8ca3415798da5809217a35bdbe01437
 
             // Generate the random data
             for (const int col: nCol) {
@@ -150,7 +120,6 @@ void nbd(const char* dataFile = "./data.root",
                 generated->Fill(sumET);
             }
 
-<<<<<<< HEAD
             // Calculate the chi2 of the given Mu and K
             // through a range of normalization values
             Double_t n = 0;
@@ -167,29 +136,10 @@ void nbd(const char* dataFile = "./data.root",
                 if (chi2 == INFINITY) break;
                 if (localChi2best > chi2) {
                     localChi2best = chi2;
-=======
-            // Calculate the Chi^2 ofr the given Mu and K
-            // through a range of normalization values
-            double chi2min;
-            double n;
-            for (int iNorm = 0; iNorm < nDim; iNorm++) {
-                generated->Scale(nMin + nDelta * iNorm);
-                chi2min = 0;
-                double Observed, Expected, diff;
-                for (int i = 20; i < 100; i++) {
-                    Expected = (double)exp->GetBinContent(i);
-                    Observed = (double)generated->GetBinContent(i);
-                    diff = Observed - Expected;
-                    chi2min += (diff*diff)/Expected;
-                }
-                if (localChi2best > chi2min) {
-                    localChi2best = chi2min;
->>>>>>> 82e75058e8ca3415798da5809217a35bdbe01437
                     n = nMin + nDelta * iNorm;
                 }
                 generated->Scale(1 / (nMin + nDelta * iNorm));
             }
-<<<<<<< HEAD
 
             // Output the resulting values in the terminal
             results->SetBinContent(iMu + 1, ik + 1, localChi2best);
@@ -204,19 +154,6 @@ void nbd(const char* dataFile = "./data.root",
                 bestN = n;
                 chi2best = localChi2best;
             }
-=======
-
-            // Output the resulting values in the terminal
-            results->SetBinContent(iMu + 1, ik + 1, localChi2best);
-            cout
-                    << "Chi2 = " << localChi2best
-                    << " MU = " << mu
-                    << " K = " << k
-                    << " N = " << n << endl;
-
-            // Saves the best K and Mu values
-            if (localChi2best < chi2best) {bestK = k; bestMu = mu;}
->>>>>>> 82e75058e8ca3415798da5809217a35bdbe01437
             localChi2best = INFINITY;
             delete generated;
         }
@@ -255,16 +192,11 @@ void nbd(const char* dataFile = "./data.root",
 
     // Config the canvas
     auto *c = new TCanvas("canvas", "canvas", 1000, 743);
-<<<<<<< HEAD
     TGaxis::SetMaxDigits(3);
-=======
-    c->SetLogy();
->>>>>>> 82e75058e8ca3415798da5809217a35bdbe01437
     c->SetLogz();
     gStyle->SetPalette(kBird);
     gStyle->SetOptStat(0);
 
-<<<<<<< HEAD
     // Personalize the resulting Chi2 histogram and draw it
     results->GetYaxis()->SetTitle("k (GeV)");
     results->GetXaxis()->SetTitle("#mu (GeV)");
@@ -275,18 +207,10 @@ void nbd(const char* dataFile = "./data.root",
         results->GetYaxis()->SetNdivisions(-(2 * scanSize) - 600);
         results->GetXaxis()->SetNdivisions(-(2 * scanSize) - 600);
     }
-=======
-    // Personalize resulting Chi2h histogram and draw it
-    results->GetYaxis()->SetTitle("k");
-    results->GetXaxis()->SetTitle("#mu");
-    results->GetYaxis()->SetNdivisions(2*scanSize+1,0,0);
-    results->GetXaxis()->SetNdivisions(2*scanSize+1,0,0);
->>>>>>> 82e75058e8ca3415798da5809217a35bdbe01437
     results->SetTitle("");
     results->DrawClone("colz");
     results->SetMarkerSize(1.5);
     results->Draw("same text");
-<<<<<<< HEAD
     c->SaveAs("graph.pdf");
 
     // Personalize the comparative histogram with partitions and draw it
@@ -321,32 +245,3 @@ void nbd(const char* dataFile = "./data.root",
     cout << "\nSmaller chi2: " << chi2best << ", Best mu: " << bestMu << ", Best K: " << bestK <<
          ", Best normalization: " << bestN << "\n\n";
 }
-=======
-    c->SaveAs("ue.png");
-
-
-    // Generate a new histogram with the best variable's values
-    NBD->SetParameters(bestMu, bestK);
-    TH1F *generated = new TH1F("Generated", "Energia gerada;#Sigma E_{T}", 100, 0, 5);
-    for (int col : nCol) {
-        double sumET = 0;
-        for (int n = 0; n < col; n++) {
-            sumET += NBD->GetRandom();
-        }
-        generated->Fill(sumET * hScale);
-    }
-
-    // Personalize the generated with the experimental histograms and draw them
-    generated->Scale(0.021);
-    generated->SetLineColor(kGreen);
-    generated->Draw("HIST");
-    exp->Draw("same E0");
-    auto* fitLeg = new TLegend(0.60,0.80,0.85,0.88);
-    fitLeg->SetTextSize(0.025);
-    fitLeg->AddEntry(generated, "Simulacao");
-    fitLeg->AddEntry(exp, "Dados experimentais");
-    fitLeg->Draw();
-    c->SaveAs("results.png");   
-
-}
->>>>>>> 82e75058e8ca3415798da5809217a35bdbe01437
