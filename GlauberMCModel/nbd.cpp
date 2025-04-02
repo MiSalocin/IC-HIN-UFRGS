@@ -18,12 +18,13 @@ using namespace std;
 // Structures used to generate and save data.
 struct Data {int nCol, nPart; double d;};
 
-void nbd(const char* dataFile = "./data.root",
-         const char* compareFile = "./HFSumEt.root"){
+// Number of normalization values to test
+constexpr int nDim = 30;
 
-    double hScale = 1./1000.;
-    const int scanSize = 5;
-    const int nDim = 10;
+// Normalization range to test
+constexpr double nMax = 1e-1;
+constexpr double nMin = 5e-3;
+constexpr double nDelta = (nMax - nMin) / (nDim - 1);
 
 // Number of each parameter value to test
 int scanSize = 8;
@@ -92,13 +93,15 @@ void nbd(const char* dataFile = "./data.root",
     }
     cout << "Done!\n";
 
-    // Create graphing variables
-    double bestK, bestMu;
+
+    // Create variables to store the best values
+    double bestK = 0, bestMu = 0, bestN = 0;
     double chi2best = INFINITY;
 
     // Run through the Mu values
+    cout << "Iterating through values:\n";
     for (int iMu = 0; iMu < scanSize; iMu++) {
-        double mu = muMin + muDelta * iMu;
+        const double mu = muMin + muDelta * iMu;
 
         // Run through the K values
         for (int ik = 0; ik < scanSize; ik++) {
@@ -109,7 +112,7 @@ void nbd(const char* dataFile = "./data.root",
 
             // Set the NBD parameters
             NBD->SetParameters(mu, k);
-            TH1F *generated = new TH1F("Generated", "sumETf vs events", 100, 0, 5);
+            const auto generated = new TH1F("Generated", "sumETf vs events", 100, 0, 5);
 
             // Generate the random data
             for (const int col: nCol) {
