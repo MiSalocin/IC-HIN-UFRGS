@@ -24,7 +24,7 @@ const Double_t
        r0       = 6.62,       // fm
        a        = 0.542,      // fm
        sigma    = 6.5,        // fm^2
-       radiusSq = sigma / (10 * pi), // fm^2
+       radiusSq = sigma / pi, // fm^2
        minDisSq = 0;          // fm^2
 
 // Main code
